@@ -1,0 +1,14 @@
+Python==3.11.9
+pandas>=2.0
+numpy>=1.26
+scipy>=1.11
+scikit-learn==1.5.0
+imbalanced-learn>=0.12
+statsmodels>=0.14
+lightgbm==4.6.0
+xgboost==3.0.5
+shap==0.48.0
+neurokit2==0.2.13
+vitaldb>=1.4
+matplotlib>=3.8
+joblib>=1.3

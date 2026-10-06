@@ -1,0 +1,12 @@
+# Study data and locally identifying recording locations
+data/
+*.vital
+
+# Generated analysis outputs
+output/
+model_artifacts/
+*.joblib
+*.pkl
+*.png
+*.pdf
+__pycache__/
