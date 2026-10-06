@@ -327,16 +327,27 @@ def main() -> None:
     validation_predictions: list[pd.DataFrame] = []
     holdout_predictions: list[pd.DataFrame] = []
     threshold_rows: list[dict[str, object]] = []
-    selection_reports: dict[str, object] = {}
+
+    # Feature selection is performed once using the complete development set.
+    # The internal held-out cohort remains untouched, and every CV fold uses the
+    # same fixed feature set selected here.
+    selected_features, selection_report = select_features(
+        dev_X,
+        dev_y,
+        args.correlation_threshold,
+        args.vif_threshold,
+        args.random_seed,
+    )
+    selection_report["selection_scope"] = "complete_development_set"
+    selection_report["development_case_count"] = int(len(dev_X))
+    selection_reports: dict[str, object] = {
+        "development_set": selection_report,
+    }
 
     outer_cv = StratifiedKFold(N_FOLDS, shuffle=True, random_state=args.random_seed)
     for fold, (train_index, valid_index) in enumerate(outer_cv.split(dev_X, dev_y)):
         X_train, y_train = dev_X.iloc[train_index], dev_y.iloc[train_index]
         X_valid, y_valid = dev_X.iloc[valid_index], dev_y.iloc[valid_index]
-        selected_features, report = select_features(
-            X_train, y_train, args.correlation_threshold, args.vif_threshold, args.random_seed + fold
-        )
-        selection_reports[f"fold_{fold}"] = report
         fold_probabilities: dict[str, np.ndarray] = {}
 
         for model_name, (estimator, search_space) in specs.items():

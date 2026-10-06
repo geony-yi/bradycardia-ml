@@ -51,8 +51,8 @@ For internal held-out evaluation, use the generated `output/training/internal_ho
 
 - Outcome: heart-rate decrease of at least 20% from the administration-time value, occurring 30 seconds to 10 minutes afterward.
 - Features: ten summary statistics per retained signal track, ECG-derived HRV, photoplethysmography-derived PRV, and age, sex, height, weight, and BMI.
-- Screening: normality-aware two-group testing at P < 0.05, followed by Spearman correlation/VIF filtering and RFECV using a Random Forest classifier.
-- Development: stratified five-fold development with training-fold-only mode imputation, standardisation from the training fold, random oversampling, random-search tuning, five tree-based classifiers, and equal-weight soft voting.
+- Screening: feature selection is performed once in the complete development set using normality-aware two-group testing at P < 0.05, followed by Spearman correlation/VIF filtering and RFECV with a Random Forest classifier. The resulting fixed feature set is used in every development fold.
+- Development: stratified five-fold development with fold-specific mode imputation, standardisation, random oversampling, random-search tuning, five tree-based classifiers, and equal-weight soft voting. The independent held-out cohort is not used for feature selection or fitting.
 - Evaluation: AUROC, accuracy, precision, recall, F1 score, Youden J and high-recall thresholds, calibration, SHAP, 2,000 case-level stratified bootstrap confidence intervals, and paired DeLong AUROC comparisons.
 
 The random-search spaces are defined in `train_models.py`. Update them only from a prespecified analysis plan; they are not inferred from an evaluation cohort.
